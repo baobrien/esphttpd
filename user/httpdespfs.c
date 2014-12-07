@@ -1,5 +1,5 @@
 /*
-Connector to let httpd use the espfs filesystem to serve the files in it.
+Connector to let httpd use the espfs filesystem to serve the files in that.
 */
 
 /*
@@ -124,15 +124,8 @@ int ICACHE_FLASH_ATTR cgiEspFsTemplate(HttpdConnData *connData) {
 				}
 			} else {
 				if (buff[x]=='%') {
-					if (tpd->tokenPos==0) {
-						//This is the second % of a %% escape string.
-						//Send a single % and resume with the normal program flow.
-						espconn_sent(connData->conn, (uint8 *)"%", 1);
-					} else {
-						//This is an actual token.
-						tpd->token[tpd->tokenPos++]=0; //zero-terminate token
-						((TplCallback)(connData->cgiArg))(connData, tpd->token, &tpd->tplArg);
-					}
+					tpd->token[tpd->tokenPos++]=0; //zero-terminate token
+					((TplCallback)(connData->cgiArg))(connData, tpd->token, &tpd->tplArg);
 					//Go collect normal chars again.
 					e=&buff[x+1];
 					tpd->tokenPos=-1;

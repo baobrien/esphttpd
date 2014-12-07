@@ -1,10 +1,8 @@
 #ifndef HTTPD_H
 #define HTTPD_H
+#include <ip_addr.h>
 #include <c_types.h>
-#include "lwip/ip_addr.h"
 #include <espconn.h>
-
-#define HTTPDVER "0.2"
 
 #define HTTPD_CGI_MORE 0
 #define HTTPD_CGI_DONE 1

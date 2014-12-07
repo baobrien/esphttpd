@@ -19,22 +19,24 @@
 #include "cgi.h"
 #include "cgiwifi.h"
 #include "stdout.h"
+#include "g35.h"
 
 HttpdBuiltInUrl builtInUrls[]={
 	{"/", cgiRedirect, "/index.tpl"},
+	{"/index.tpl",cgiRedirect,"/g35.tpl"},
 	{"/flash.bin", cgiReadFlash, NULL},
-	{"/led.tpl", cgiEspFsTemplate, tplLed},
-	{"/index.tpl", cgiEspFsTemplate, tplCounter},
-	{"/led.cgi", cgiLed, NULL},
-
+	//{"/led.tpl", cgiEspFsTemplate, tplLed},
+	{"/cats.tpl", cgiEspFsTemplate, tplCounter},
+	//{"/led.cgi", cgiLed, NULL},
+	{"/g35_pattern.cgi", cgi_g35_pattern, NULL},
+	{"/g35_led.cgi",cgi_g35_led,NULL},
+	{"/g35.tpl",cgiEspFsTemplate, tpl_g35_json},
 	//Routines to make the /wifi URL and everything beneath it work.
 	{"/wifi", cgiRedirect, "/wifi/wifi.tpl"},
 	{"/wifi/", cgiRedirect, "/wifi/wifi.tpl"},
 	{"/wifi/wifiscan.cgi", cgiWiFiScan, NULL},
 	{"/wifi/wifi.tpl", cgiEspFsTemplate, tplWlan},
-	{"/wifi/connect.cgi", cgiWiFiConnect, NULL},
-	{"/wifi/setmode.cgi", cgiWifiSetMode, NULL},
-
+	{"/wifi/connect.cgi", cgiWiFiConnect},
 
 	{"*", cgiEspFsHook, NULL}, //Catch-all cgi function for the filesystem
 	{NULL, NULL, NULL}
@@ -44,6 +46,7 @@ HttpdBuiltInUrl builtInUrls[]={
 void user_init(void) {
 	stdoutInit();
 	ioInit();
+	g35_init(36);
 	httpdInit(builtInUrls, 80);
 	os_printf("\nReady\n");
 }
